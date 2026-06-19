@@ -1,4 +1,4 @@
-// OwO
+// https://www.luogu.com.cn/problem/P3369
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long
@@ -113,9 +113,6 @@ void del (int x) {
         mid->up();
         l = merge(l,mid);
     } else {
-        if (t1.st == t2.nd) {
-            t1.st = nl;
-        }
         delete t2.nd;
         t2.nd = nl;
     }
@@ -124,9 +121,9 @@ void del (int x) {
 }
 
 int find_rk (int x) {
-    auto t1 = split(root, x - 1);
-    int ans = (t1.st == nl ? 1 : t1.st->size + 1);
-    root = merge(t1.first, t1.second);
+    auto tmp = split(root, x - 1);
+    int ans = (tmp.st == nl ? 1 : tmp.st->size + 1);
+    root = merge(tmp.first, tmp.second);
     return ans;
 }
 
