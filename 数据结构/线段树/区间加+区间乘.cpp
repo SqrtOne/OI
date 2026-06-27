@@ -1,4 +1,5 @@
 // https://www.luogu.com.cn/problem/P3373
+// 在线段树1的基础上实现区间乘
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long

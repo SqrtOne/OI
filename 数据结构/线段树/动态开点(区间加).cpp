@@ -96,7 +96,8 @@ signed main () {
 			int x, y;
 			cin >> x >> y;
             int res = query(1, 1, n, x, y);
-            res += (x + y) * (y - x + 1) / 2;
+            res += (x + y) * (y - x + 1) / 2; 
+				// 初始时a[i]=i，题目の特殊处理
 			cout << res << endl;
 		}
 	}

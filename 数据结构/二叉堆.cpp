@@ -8,7 +8,7 @@ using namespace std;
 
 const int N = 1e6 + 7;
 int arr[N];
-int cnt = 1;
+int cnt = 0;
 
 void push_up (int ind) {
     if (ind == 1 || arr[ind / 2] <= arr[ind]) 
@@ -36,10 +36,10 @@ void insert (int x) {
     push_up(cnt);
 }
 
-void pop (int x) {
+void pop () {
     swap(arr[1], arr[cnt]);
     cnt--;
-
+    push_down(1);
 }
 
 signed main () {
@@ -47,8 +47,8 @@ signed main () {
     int n;
     cin >> n;
     for (int i = 1; i <= n; ++i) {
-        cin >> arr[i];
-        insert(arr[i]);
+        int x; cin >> x;
+        insert(x);
     }
     return 0;
 }
