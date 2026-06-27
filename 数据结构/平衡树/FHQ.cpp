@@ -172,7 +172,7 @@ signed main () {
                 cout << find_pre(x) << endl;
                 break;
             case 6:
-                cout << find_nex(x) << endl; 
+                cout << find_nex(x) << endl;
                 break;
         }
     }
