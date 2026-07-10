@@ -21,7 +21,7 @@ signed main () {
     }
     for (int j = 1; j <= log_n[n]; ++j) {
         for (int i = 1; i + (1LL << j) - 1 <= n; ++i) {
-            ST[i][j] = max(ST[i][j - 1], ST[i + (1LL << j - 1)][j - 1]);
+            ST[i][j] = max(ST[i][j - 1], ST[i + (1LL << (j - 1))][j - 1]);
         }
     }
     while (m--) {
