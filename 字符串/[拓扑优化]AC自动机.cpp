@@ -10,17 +10,21 @@ const int N = 2e6 + 7;
 int Trie[N][26] = {};
 vector<int> fail(N);
 vector<int> stop(N);
+vector<int> in(N);
+vector<int> sum(N);
+vector<int> id(N);
 int cnt = 0;
 
-void insert (string &s) {
-	int ind = 0;
+void insert (string &s, int ind) {
+	int u = 0;
 	for (int i = 0; i < s.size(); ++i) {
 		int c = s[i] - 'a';
-		if (!Trie[ind][c]) 
-			Trie[ind][c] = ++cnt;
-		ind = Trie[ind][c];
+		if (!Trie[u][c]) 
+			Trie[u][c] = ++cnt;
+		u = Trie[u][c];
 	}
-	stop[ind] ++;
+	stop[u] ++;
+	id[ind] = u;
 }
 
 void build () {
@@ -34,6 +38,7 @@ void build () {
 		for (int i = 0; i < 26; ++i) {
 			if (Trie[u][i]) {
 				fail[Trie[u][i]] = Trie[fail[u]][i]; // 设置fail指针
+				in[Trie[fail[u]][i]] ++;
 				q.push(Trie[u][i]);
 			} else {
 				Trie[u][i] = Trie[fail[u]][i]; // 压缩路径
@@ -42,30 +47,39 @@ void build () {
 	}
 }
 
-int query (string &s) {
-	int p = 0, res = 0;
+void query (string &s) {
+	int p = 0;
 	for (int i = 0; i < s.size(); ++i) {
 		p = Trie[p][s[i] - 'a'];
-		int j = p;
-		while (j != 0 && stop[j] != -1) {
-			res += stop[j];
-			stop[j] = -1;
-			j = fail[j];
-		}
+		sum[p] ++;
 	}
-	return res;
+}
+
+void topu () {
+	queue<int> q;
+	for (int i = 0; i <= cnt; ++i) {
+		if (!in[i])	q.push(i);
+	}
+
+	while (!q.empty()) {
+		int u = q.front();	q.pop();
+		int v = fail[u];
+		sum[v] += sum[u];
+		if (!(--in[v])) q.push(v);
+	}
 }
 
 signed main () {
 	ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
-	int n;
-	cin >> n;
+	int n;	cin >> n;
 	for (int i = 1; i <= n; ++i) {
-		string s;	cin >> s;
-		insert(s);
+		string S;	cin >> S;
+		insert(S, i);
 	}
-	build();
 	string T;	cin >> T;
-	cout << query(T) << endl;
+	build();	query(T);	topu();
+	for (int i = 1; i <= n; ++i) {
+		cout << sum[id[i]] << endl;
+	}
 	return 0;
 }
