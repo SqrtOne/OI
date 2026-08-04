@@ -1,4 +1,4 @@
-// OwO
+// https://www.luogu.com.cn/problem/P3378
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long
@@ -11,7 +11,7 @@ int arr[N];
 int cnt = 0;
 
 void push_up (int ind) {
-    if (ind == 1 || arr[ind / 2] <= arr[ind]) 
+    if (ind == 1 || arr[ind / 2] <= arr[ind]) // 小根堆
         return;
     swap(arr[ind], arr[ind / 2]);
     push_up(ind / 2);
@@ -31,7 +31,7 @@ void push_down (int ind) {
     }
 }
 
-void insert (int x) {
+void push (int x) {
     arr[++cnt] = x;
     push_up(cnt);
 }
@@ -42,13 +42,25 @@ void pop () {
     push_down(1);
 }
 
+int top () {
+	if (cnt == 0) return INT_MIN;
+	return arr[1];
+}
+
 signed main () {
     ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
-    int n;
-    cin >> n;
-    for (int i = 1; i <= n; ++i) {
-        int x; cin >> x;
-        insert(x);
-    }
+    int n;	cin >> n;
+	while (n --) {
+		int op, x;
+		cin >> op;
+		if (op == 1) {
+			cin >> x;
+			push(x);
+		} else if (op == 2) {
+			cout << top() << endl;
+		} else {
+			pop();
+		}
+	}
     return 0;
 }

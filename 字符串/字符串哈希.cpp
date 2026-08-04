@@ -44,6 +44,7 @@ signed main () {
     while (n--) {
         string s;
         cin >> s;
+        s = ' ' + s;
         get_hash(s);
         int res1 = func1(1, s.size() - 1);
         int res2 = func2(1, s.size() - 1);

@@ -57,7 +57,7 @@ int query (int ind, int L, int R, int l, int r) {
 }
 
 void update (int &ind, int L, int R, int l, int r, int x) {
-    if (ind == 0) {
+    if (ind == 0) {	// 可能创建新节点，ind需传引用
         ind = ++cnt;
     }
 

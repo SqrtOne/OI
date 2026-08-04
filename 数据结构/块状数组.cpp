@@ -13,8 +13,8 @@ int belong[N];
 int len, n;
 
 int lazy[N] = {}; // 块内每一个元素加了多少？
-int num[N] = {}; // 单一的数值加了多少？ 单一的真实数值为 num[i] + lazy[belong[i]];
-int sum[N] = {}; // 第i块的总和，用于跳块
+int num[N] = {};  // 单一的数值加了多少？ 单一的真实数值为 num[i] + lazy[belong[i]];
+int sum[N] = {};  // 第i块的总和，用于跳块
 
 void update (int L, int R, int x) {
     if (belong[L] == belong[R]) {

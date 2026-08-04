@@ -1,4 +1,4 @@
-// https://www.luogu.com.cn/problem/P1993
+// https://www.luogu.com.cn/problem/P1260
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long
@@ -6,73 +6,59 @@ using namespace std;
 #define st first
 #define nd second
 
-const int N = 5e3 + 7;
-vector<pair<int, int>> arr[N];
 int n, m, s = 0;
-
-int dist[N];
+const int N = 1007;
+vector<pair<int, int>> _map[N];
+vector<int> dist(N);
+vector<int> cnt(N);
+bool in[N];
 queue<int> q;
-int cnt[N];
-bool hx[N];
 
 bool SPFA () {
-    dist[s] = 0;
-    q.push(s);
-    while (!q.empty()) {
-        int u = q.front();
-        q.pop();
-        hx[u] = false;
+	q.push(s);
+	dist[s] = 0;
 
-        for (int i = 0; i < arr[u].size(); ++i) {
-            int v = arr[u][i].st, w = arr[u][i].nd;
-            if (dist[u] == INT_MAX) continue;
-            if (dist[u] + w < dist[v]) {
-                dist[v] = dist[u] + w;
-                cnt[v] = cnt[u] + 1;
-                if (!hx[v]) {
-                    q.push(v);
-                    hx[v] = true;
-                }
+	while (!q.empty()) {
+		int u = q.front();	q.pop(); in[u] = false;
 
-                if (cnt[v] >= n + 1) {
-                    return false;
-                }
-            }
-        }
-    }
-    return true;
+		for (auto i: _map[u]) {
+			int v = i.st, w = i.nd;
+			if (dist[u] == INT_MAX) continue;
+			if (dist[u] + w < dist[v]) {
+				dist[v] = dist[u] + w;
+				cnt[v] = cnt[u] + 1;
+				if (!in[v]) {
+					q.push(v);
+					in[v] = true;
+				}
+
+				if (cnt[v] >= n + 1) return false;
+			}
+		}
+	}
+	return true;
 }
 
 signed main () {
-    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
-    cin >> n >> m;
-    for (int i = 1; i <= m; ++i) {
-        int op, a, b, c;
-        cin >> op >> a >> b;
+	ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+	cin >> n >> m;
+	for (int i = 1; i <= m; ++i) {
+		int u, v, w;
+		cin >> u >> v >> w;
+		_map[v].push_back({u, w});
+	}
+	for (int i = 1; i <= n; ++i) {
+		_map[s].push_back({i, 0});
+		dist[i] = INT_MAX;
+	}
 
-        // d[v] <= d[u] + w
-        if (op == 3) {      // a <= b + 0 && b <= a + 0
-            arr[a].push_back({b, 0});
-            arr[b].push_back({a, 0});
-        } else if (op == 1) {   // b <= a - c
-            cin >> c;
-            arr[a].push_back({b, -c});
-        } else if (op == 2) {   // a <= b + c
-            cin >> c;
-            arr[b].push_back({a, c});
-        } else cout << "XwX" << endl;
-    }
-
-    for (int i = 1; i <= n; ++i) {
-        arr[0].push_back({i, 0});
-        dist[i] = INT_MAX;
-    }
-
-    cout << (SPFA()? "Yes": "No") << endl;
-    /*
-    for (int i = 1; i <= n; ++i) {
-        cout << dist[i] << ' ';
-    }
-    */
-    return 0;
+	if (!SPFA()) {
+		cout << "NO SOLUTION" << endl;
+		return 0;
+	}
+	
+	int _min = INT_MAX;
+	for (int i = 1; i <= n; ++i) _min = min(dist[i], _min);
+	for (int i = 1; i <= n; ++i) cout << dist[i] - _min << endl;
+	return 0;
 }
