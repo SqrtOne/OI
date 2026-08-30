@@ -9,31 +9,6 @@ using namespace std;
 #define nl nullptr
 #define less (p->ls == nl ? 0 : p->ls->size)
 
-inline int read () {
-	int x = 0, f = 1;
-	char ch = getchar();
-	while (ch < '0' || ch > '9') {
-		if (ch == '-') f = -1;
-		ch = getchar();
-	}
-
-	while (ch >= '0' && ch <= '9') {
-		x = (x << 3) + (x << 1) + ch - '0';
-		ch = getchar();
-	}
-
-	return x * f;
-}
-
-inline void write (int x) {
-	if (x < 0) {
-		putchar('-');
-		x = -x;
-	}
-	if (x > 9) write(x / 10);
-	putchar(x % 10 + '0');
-}
-
 const int INF = INT_MAX;
 struct Node {
 	int val, cnt, size, rk = 0;
@@ -146,6 +121,7 @@ void _delete (int ver, int val) {
 	vers.push_back(root);
 }
 
+#if 1
 int find_rk (Node *p, int val) {
 	auto t = split_val(p, val - 1);
 	int res = (t[0] == nl ? 1 : t[0]->size + 1);
@@ -173,36 +149,56 @@ int find_next (Node *p, int val) {
 	p = merge(t[0], t[1]);
 	return res;
 }
+#else
+int find_rk (Node *p, int val) {
+	if (p == nl) return 1;
+	if (val <= p->val) return find_rk(p->ls, val);
+	else return less + p->cnt + find_rk(p->rs, val);
+}
 
+int find_val (Node *p, int rk) {
+	if (rk <= less) return find_val(p->ls, rk);
+	else if (rk <= less + p->cnt) return p->val;
+	else return find_val(p->rs, rk - less - p->cnt);
+}
+
+int find_pre (Node *p, int val) {
+	if (p == nl) return -INF;
+	if (p->val < val) return max(p->val, find_pre(p->rs, val));
+	else return find_pre(p->ls, val);
+}
+
+int find_next (Node *p, int val) {
+	if (p == nl) return INF;
+	if (p->val > val) return min(p->val, find_next(p->ls, val));
+	else return find_next(p->rs, val);
+}
+#endif
 signed main () {
-	// ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+	ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
 	srand(time(0));
-	int n = read();
+	int n;    cin >> n;
 	vers.reserve(n + 1);
 	vers.push_back(nl);
 	while (n--) {
 		int ver, op, x;
-		ver = read(), op = read(), x = read();
+		cin >> ver >> op >> x;
 		if (op == 1) insert(ver, x);
 		if (op == 2) _delete(ver, x);
 		if (op == 3) {
-			write(find_rk(vers[ver], x));
-			putchar('\n');
+			cout << find_rk(vers[ver], x) << endl;
 			vers.push_back(vers[ver]);
 		}
 		if (op == 4) {
-			write(find_val(vers[ver], x));
-			putchar('\n');
+			cout << find_val(vers[ver], x) << endl;
 			vers.push_back(vers[ver]);
 		}
 		if (op == 5) {
-			write(find_pre(vers[ver], x));
-			putchar('\n');
+			cout << find_pre(vers[ver], x) << endl;
 			vers.push_back(vers[ver]);
 		}
 		if (op == 6) {
-			write(find_next(vers[ver], x));
-			putchar('\n');
+			cout << find_next(vers[ver], x) << endl;
 			vers.push_back(vers[ver]);
 		}
 	}
