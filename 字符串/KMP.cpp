@@ -29,14 +29,13 @@ signed main () {
     cin >> S >> T;
     string x = T + "#" + S;
     KMP(x);
-    int T_size = T.size();
-    for (int i = T_size + 1; i < x.size(); ++i) {
-        if (nex[i] == T_size) {
+    for (int i = T.size() + 1; i < x.size(); ++i) {
+        if (nex[i] == T.size()) {
             cout << i - 2 * T.size() + 1 << endl;
         }
     }
     KMP(T);
-    for (int i = 0; i < T_size; ++i) {
+    for (int i = 0; i < T.size(); ++i) {
         cout << nex[i] << ' ';
     }
     cout << endl;
